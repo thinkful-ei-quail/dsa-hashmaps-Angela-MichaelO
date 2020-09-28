@@ -1,10 +1,12 @@
 const HashMap = require('./hashmap');
+const HashMap_SC = require('./hashmapSC');
 
 function main(){
   
   HashMap.MAX_LOAD_RATIO = 0.5;
   HashMap.SIZE_RATIO = 3;
   const lotr = new HashMap();
+  const lotr_SC = new HashMap_SC();
   
   lotr.set('Hobbit','Bilbo' );
   lotr.set('Hobbit','Frodo' );
@@ -18,12 +20,25 @@ function main(){
   lotr.set('HalfElven','Arwen' );
   lotr.set('Ent','Treebeard' );
   
-  console.log(lotr);
+  lotr_SC.set('Hobbit','Bilbo' );
+  lotr_SC.set('Hobbit','Frodo' );
+  lotr_SC.set('Wizard','Gandalf' );
+  lotr_SC.set('Human','Aragorn' );
+  lotr_SC.set('Elf','Legolas' );
+  lotr_SC.set('Maiar','The Nercomancer' );
+  lotr_SC.set('Maiar','Sauron' );
+  lotr_SC.set('RingBearer','Gollum' );
+  lotr_SC.set('LadyOfLight','Galadriel' );
+  lotr_SC.set('HalfElven','Arwen' );
+  lotr_SC.set('Ent','Treebeard' );
+  
+  console.log('OPEN ADDRESSING: ', lotr);
+  console.log('SEPARATE CHAINING: ',lotr_SC);
   console.log(lotr.get('Maiar'));
   console.log(lotr.get('Hobbit'));
   
 }
-//main();
+main();
 //#1
 //Print your hash map and notice the length and items that are hashed in your
 //hash map. Have you hashed all the items you were asked to?
@@ -63,13 +78,13 @@ function deleteRepeat(str) {
   HashMap.MAX_LOAD_RATIO = 0.8;
   HashMap.SIZE_RATIO = 3;
 
-  str = str.toLowerCase()
-  const map1 = new HashMap()
-  let final = ''
+  str = str.toLowerCase();
+  const map1 = new HashMap();
+  let final = '';
 
   for (let i = 0; i < str.length; i++) {
     try {
-      let char = map1.get(str.charAt(i))
+      map1.get(str.charAt(i))
     }
     catch {
       map1.set(str.charAt(i), str.charAt(i))
@@ -81,15 +96,15 @@ function deleteRepeat(str) {
 
 }
 
-console.log(deleteRepeat('google all that you think can think of'))
-console.log(deleteRepeat('zzzzzzzzyyyyyyyywwwwwwwwwwwwwwxxxxxxxxxxxxx'))
+// console.log(deleteRepeat('google all that you think can think of'))
+// console.log(deleteRepeat('zzzzzzzzyyyyyyyywwwwwwwwwwwwwwxxxxxxxxxxxxx'))
 
 function isPalindrome(str) {
+  const query = new HashMap();
   HashMap.SIZE_RATIO = 3;
   HashMap.MAX_LOAD_RATIO = 0.8;
 
   str = str.toLowerCase();
-
   for (let i = 0; i < str.length; i++) {
     try {
       let count = query.get(str.charAt(i))
@@ -128,6 +143,29 @@ function isPalindrome(str) {
 }
 
 // console.log(isPalindrome('aaccrrdd'))
+// console.log(isPalindrome('aaccrr'))
 // console.log(isPalindrome('aaccrddqq'))
 // console.log(isPalindrome('north'))
+
+const groupAnagrams = (strArr) => {
+  const anagramMap = new Map()
+  strArr.forEach(word => {
+    let sorted = alphabetize(word)
+    if (anagramMap.has(sorted)) {
+      anagramMap.get(sorted).push(word)
+    }
+    else {
+      anagramMap.set(sorted, [word])
+    }
+  })
+  return [...anagramMap.values()]
+}
+
+const alphabetize = word => {
+  let alphabetized = word.split('').sort().join('')
+  return alphabetized
+}
+
+//console.log(groupAnagrams(['east', 'cars', 'acre', 'arcs', 'teas', 'eats', 'race']))
+
 
